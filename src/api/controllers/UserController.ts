@@ -100,7 +100,7 @@ class UserController {
     }
   };
 
-  //API : /users/verify/:sessionId
+  //API : /users/verifyToken/:sessionId
   //Method : GET
   //Access : Public
   //Description : verify a user's data
