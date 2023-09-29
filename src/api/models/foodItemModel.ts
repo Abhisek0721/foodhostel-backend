@@ -5,7 +5,7 @@ export interface IFoodItem extends Document {
   sellerId: ISeller["_id"];
   imgName: string;
   foodName: string;
-  foodCategory: string;
+  foodCategory: 'Briyani'|'Pizza'|'Burger'|'Rolls'|'Sandwich'|'Sweets'|'Others';
   beverageVolume?: number; // in ml
   foodPrice: number; // in INR
   foodRating?: number;

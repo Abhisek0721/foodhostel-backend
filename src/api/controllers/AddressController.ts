@@ -62,7 +62,13 @@ class AddressController {
                     userId: userId
                 },
                 {
-                    $set: req.body
+                    $set: {
+                        pincode: pincode,
+                        city: city,
+                        state: state,
+                        buildingName: buildingName,
+                        roadName: roadName
+                    }
                 },
                 {
                     upsert: true
