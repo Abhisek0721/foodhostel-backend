@@ -4,17 +4,25 @@ import FoodItem from "../models/foodItemModel";
 import Seller, { ISeller } from "../models/sellerModel";
 
 class FoodItemController {
-    //API : /fooditem/showFoodItems?pincode={pincode}
+    //API : /fooditem/showFoodItems?pincode={pincode}&skipFrom={skipFrom}&limit={limit}
     //Method : GET
     //Access : Public
-    //Description : fetch food items
+    //Description : fetch food items (Here, query perameters is optional)
     showFoodItems = async (req: Request, res: Response) => {
         try {
             const showCategory = ['Briyani', 'Pizza', 'Burger', 'Rolls', 'Sandwich', 'Sweets', 'Others'];
-            let pincode = req.query.pincode;
+            let pincode = req.query?.pincode;
+            let skipFrom = Number(req.query?.skipFrom);
+            let limit = Number(req.query?.limit);
             let fetchActiveRestro = [];
             if(!pincode || pincode==='null'){
                 pincode = '140307'
+            }
+            if(!skipFrom) {
+                skipFrom = 0;
+            }
+            if(!limit) {
+                limit = 20;
             }
             let fetchSellers = await Seller.find(
                 {
@@ -32,6 +40,11 @@ class FoodItemController {
                 {
                     sellerId: {$in: fetchActiveRestro},
                     foodCategory: {$in: showCategory}
+                },
+                { },
+                {
+                    skip: skipFrom,
+                    limit: limit
                 }
             );
             return res.status(200).json({
@@ -47,17 +60,25 @@ class FoodItemController {
         }
     }
 
-    //API : /fooditem/showFilteredFoodItems?pincode={pincode}&category={category}
+    //API : /fooditem/showFilteredFoodItems?pincode={pincode}&category={category}&skipFrom={skipFrom}&limit={limit}
     //Method : GET
     //Access : Public
     //Description : fetch filtered food items
     showFilteredFoodItems = async (req: Request, res: Response) => {
         try {
             let pincode = req.query.pincode;
+            let skipFrom = Number(req.query?.skipFrom);
+            let limit = Number(req.query?.limit);
             let category = req.query.category;
             let fetchActiveRestro = [];
             if(!pincode || pincode===null){
                 pincode = '140307'
+            }
+            if(!skipFrom) {
+                skipFrom = 0;
+            }
+            if(!limit) {
+                limit = 20;
             }
             let fetchSellers = await Seller.find(
                 {
@@ -75,6 +96,11 @@ class FoodItemController {
                 {
                     sellerId: {$in: fetchActiveRestro},
                     foodCategory: category
+                },
+                { },
+                {
+                    skip: skipFrom,
+                    limit: limit
                 }
             );
             return res.status(200).json({
@@ -90,7 +116,7 @@ class FoodItemController {
         }
     }
 
-    //API : /fooditem/searchFood?pincode={pincode}&text={text}
+    //API : /fooditem/searchFood?pincode={pincode}&text={text}&skipFrom={skipFrom}&limit={limit}
     //Method : GET
     //Access : Public
     //Description : search food items
@@ -100,6 +126,14 @@ class FoodItemController {
                 pincode,
                 text
             } = req.query;
+            let skipFrom = Number(req.query?.skipFrom);
+            let limit = Number(req.query?.limit);
+            if(!skipFrom) {
+                skipFrom = 0;
+            }
+            if(!limit) {
+                limit = 20;
+            }
 
             let regex = new RegExp(text.toString(),'i');
             let showCategory = ['Briyani', 'Pizza', 'Burger', 'Rolls', 'Sandwich', 'Sweets', 'Others'];
@@ -125,6 +159,11 @@ class FoodItemController {
                         {foodName: regex},
                         {foodCategory:regex}
                     ]
+                },
+                { },
+                {
+                    skip: skipFrom,
+                    limit: limit
                 }
             );
             

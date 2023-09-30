@@ -140,6 +140,60 @@ class SellerController {
       });
     }
   }
+
+  //API : /restro/deleteFood/:sessionId?foodId={foodId}
+  //Method : DELETE
+  //Access : Public
+  //Description : delete food item
+  deleteFood = async (req: CustomRequest, res: Response) => {
+    const userId = req.userId;
+    try {
+      const foodId = req.query?.foodId;
+      if(!foodId){
+        return res.status(400).json(
+          {
+            status: false,
+            message: "foodId is not received as a query parameter!"
+          }
+        );
+      }
+      let checkSeller = await Seller.findOne(
+        {
+          userId: userId
+        },
+        {
+          _id: 1
+        }
+      );
+      if(!checkSeller){
+        return res.status(403).json(
+          {
+            status: false,
+            message: "This sessionId is not identified as restro partner."
+          }
+        );
+      }
+      const info = await FoodItem.deleteOne(
+        {
+          _id: foodId,
+          sellerId: checkSeller._id
+        }
+      );
+      return res.status(200).json(
+        {
+          status: true,
+          info: info,
+          message: "Food item is deleted!"
+        }
+      );
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: error?.message,
+        error: error?.stack,
+      });
+    }
+  }
 }
 
 export default new SellerController();
