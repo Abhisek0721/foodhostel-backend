@@ -57,7 +57,7 @@ class FoodOrderController {
         foodPrice * 100 // In paise
       );
 
-      if (razorpayResponse.id) {
+      if (razorpayResponse?.id) {
         let foodOrder = new FoodOrder({
           userId: userId,
           sellerId: sellerId,

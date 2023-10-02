@@ -41,4 +41,34 @@ router
     SellerController.getRestroFoods(req as CustomRequest, res);
   });
 
+router
+  .route("/foodOrderList/:sessionId")
+  .get(customCheckSeller, (req: Request, res: Response) => {
+    SellerController.foodOrderList(req as CustomRequest, res);
+  });
+
+router
+  .route("/foodOrderHistory/:sessionId")
+  .get(customCheckSeller, (req: Request, res: Response) => {
+    SellerController.foodOrderHistory(req as CustomRequest, res);
+  });
+
+router
+  .route("/getRestroStatus/:sessionId")
+  .get(customCheckSeller, (req: Request, res: Response) => {
+    SellerController.getRestroStatus(req as CustomRequest, res);
+  });
+
+router
+  .route("/updateRestroStatus")
+  .put(customCheckSeller, (req: Request, res: Response) => {
+    SellerController.updateRestroStatus(req as CustomRequest, res);
+  });
+
+router
+  .route("/restroOrderDecision")
+  .put(customCheckSeller, (req: Request, res: Response) => {
+    SellerController.restroOrderDecision(req as CustomRequest, res);
+  });
+
 export default router;

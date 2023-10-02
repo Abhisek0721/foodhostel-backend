@@ -11,6 +11,7 @@ export const verifySeller = async (
   let sessionId =
     req.body.sessionId || req.params.sessionId || req.query.sessionId;
 
+  
   if (!sessionId) {
     return res.status(400).json({
       auth: false,

@@ -4,6 +4,7 @@ import Seller from "../models/sellerModel";
 // import saveFoodImages from "../../utils/imageUploadUtils";
 import FoodItem from "../models/foodItemModel";
 import SellerClass from "../classes/SellerClass";
+import FoodOrder from "../models/foodOrderModel";
 
 // API's related to restro partners
 
@@ -219,6 +220,197 @@ class SellerController {
       return res.status(200).json({
         status: true,
         data: fetchFoods,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: error?.message,
+        error: error?.stack,
+      });
+    }
+  };
+
+  //API : /restro/foodOrderList/:sessionId?skipFrom={skipFrom}&limit={limit}
+  //Method : GET
+  //Access : Public
+  //Description : fetch food orders of restro partner whose restro's decision is pending
+  foodOrderList = async (req: CustomRequest, res: Response) => {
+    try {
+      let { skipFrom, limit } = req.query;
+      if (!skipFrom) {
+        skipFrom = "0";
+      }
+      if (!limit) {
+        limit = "20";
+      }
+
+      const fetchFoods = await FoodOrder.find(
+        {
+          sellerId: req.sellerId,
+          orderStatus: true,
+          sellerDecision: "pending",
+        },
+        {},
+        {
+          skip: Number(skipFrom),
+          limit: Number(limit),
+          sort: "-orderDateTime", // sort by decending order
+        }
+      );
+
+      return res.status(200).json({
+        status: true,
+        data: fetchFoods,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: error?.message,
+        error: error?.stack,
+      });
+    }
+  };
+
+  //API : /restro/foodOrderHistory/:sessionId?skipFrom={skipFrom}&limit={limit}
+  //Method : GET
+  //Access : Public
+  //Description : fetch food orders history of restro partner
+  foodOrderHistory = async (req: CustomRequest, res: Response) => {
+    try {
+      let { skipFrom, limit } = req.query;
+      if (!skipFrom) {
+        skipFrom = "0";
+      }
+      if (!limit) {
+        limit = "20";
+      }
+
+      const fetchFoods = await FoodOrder.find(
+        {
+          sellerId: req.sellerId,
+          orderStatus: true,
+        },
+        {},
+        {
+          skip: Number(skipFrom),
+          limit: Number(limit),
+          sort: "-orderDateTime", // sort by decending order
+        }
+      );
+
+      return res.status(200).json({
+        status: true,
+        data: fetchFoods,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: error?.message,
+        error: error?.stack,
+      });
+    }
+  };
+
+  //API : /restro/getRestroStatus/:sessionId
+  //Method : GET
+  //Access : Public
+  //Description : fetch restro partner availability (active status)
+  getRestroStatus = async (req: CustomRequest, res: Response) => {
+    try {
+      const getStatus = await Seller.findOne(
+        {
+          _id: req.sellerId,
+        },
+        {
+          activate: 1,
+        }
+      );
+      return res.status(200).json({
+        status: true,
+        activate: getStatus.activate,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: error?.message,
+        error: error?.stack,
+      });
+    }
+  };
+
+  //API : /restro/updateRestroStatus
+  //Method : PUT
+  //Access : Public
+  //Description : change restro partner availability (active status)
+  updateRestroStatus = async (req: CustomRequest, res: Response) => {
+    try {
+      const getStatus = await Seller.findOne(
+        {
+          _id: req.sellerId,
+        },
+        {
+          activate: 1,
+        }
+      );
+      await Seller.updateOne(
+        {
+          _id: req.sellerId,
+        },
+        {
+          $set: {
+            activate: !getStatus.activate,
+          },
+        }
+      );
+      return res.status(200).json({
+        status: true,
+        activate: !getStatus.activate,
+        message: "Updated Restro Status",
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: error?.message,
+        error: error?.stack,
+      });
+    }
+  };
+
+  //API : /restro/restroOrderDecision
+  //Method : PUT
+  //Access : Public
+  //Description : Take decision(by resto partner) of food ordered by users
+  restroOrderDecision = async (req: CustomRequest, res: Response) => {
+    try {
+      const {
+        restroDecision, // restro partner decision
+        orderId, // food order id
+      }: {
+        restroDecision: "accepted" | "rejected" | undefined;
+        orderId: string | undefined;
+      } = req.body;
+
+      if (!restroDecision || !orderId) {
+        return res.status(400).json({
+          status: false,
+          message: "Some fields are missing in payload!",
+        });
+      }
+
+      await FoodOrder.updateOne(
+        {
+          _id: orderId,
+        },
+        {
+          $set: {
+            sellerDecision: restroDecision,
+          },
+        }
+      );
+
+      return res.status(200).json({
+        status: true,
+        message: "food order has been updated by restro's decision!",
       });
     } catch (error) {
       return res.status(500).json({

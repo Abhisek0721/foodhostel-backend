@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "nodemon server.ts",
     "start": "node dist/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "nodemon --inspect server.ts",
     "build": "tsc"
   },
   "author": "Abhisekh Upadhaya",

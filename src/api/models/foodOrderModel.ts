@@ -22,7 +22,7 @@ export interface IFoodOrder extends Document {
   foodPrice: number;
   orderDateTime?: Date;
   orderStatus?: boolean;
-  sellerDecision?: string;
+  sellerDecision?: "accepted"|"rejected"|"pending";
   delivered?: boolean;
 }
 
