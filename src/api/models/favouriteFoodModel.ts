@@ -17,6 +17,7 @@ const favouriteFoodSchema:Schema = new Schema<IFavouriteFood>({
     foodItemId: {
         type: Schema.Types.ObjectId,
         required: true,
+        unique: true,
         ref: "FoodItem"
     },
     foodName: {
@@ -25,6 +26,6 @@ const favouriteFoodSchema:Schema = new Schema<IFavouriteFood>({
     }
 });
 
-const FavouriteFood:Model<IFavouriteFood> = model<IFavouriteFood>("AddToFavourite", favouriteFoodSchema);
+const FavouriteFood:Model<IFavouriteFood> = model<IFavouriteFood>("favouritefood", favouriteFoodSchema);
 
 export default FavouriteFood;
