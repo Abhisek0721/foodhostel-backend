@@ -37,7 +37,7 @@ router
 
 router
   .route("/getRestroFoods/:sessionId")
-  .delete(customCheckSeller, (req: Request, res: Response) => {
+  .get(customCheckSeller, (req: Request, res: Response) => {
     SellerController.getRestroFoods(req as CustomRequest, res);
   });
 
