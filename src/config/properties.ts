@@ -40,7 +40,7 @@ const properties: propertiesInterface = {
   RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID || `rzp_test_74l7fOTJq7OZMi`,
 
   RAZORPAY_KEY_SECRET:
-    process.env.RAZORPAY_KEY_SECRET || `pmBAe8uuVMZzWvdj5xCnzkZM`,
+    process.env.RAZORPAY_KEY_SECRET || `pmBAe8uuVMZzWvdj5xCnzkZM`
 };
 
 export default properties;
