@@ -1,6 +1,5 @@
 import properties from "../../config/properties";
 import CustomRequest from "../common/CustomRequestInterface";
-import { Types } from "mongoose";
 import Razorpay from "razorpay";
 
 class FoodOrderClass {
@@ -27,7 +26,7 @@ class FoodOrderClass {
         sms: true,
         email: true
       },
-      callback_url: properties.SERVER_URL,
+      callback_url: properties.CLIENT_URL,
       callback_method: "get"
     });
 

@@ -2,11 +2,15 @@ import express, { Request, Response, NextFunction } from "express";
 import SellerController from "../controllers/SellerController";
 const router = express.Router();
 import { checkUser } from "../middlewares/verifyUser";
+import { verifySeller } from "../middlewares/verifySeller";
 import CustomRequest from "../common/CustomRequestInterface";
-
 
 const customCheckUser = (req: Request, res: Response, next: NextFunction) => {
   checkUser(req as CustomRequest, res, next);
+};
+
+const customCheckSeller = (req: Request, res: Response, next: NextFunction) => {
+  verifySeller(req as CustomRequest, res, next);
 };
 
 router.route("/joinus").post(customCheckUser, (req: Request, res: Response) => {
@@ -15,21 +19,20 @@ router.route("/joinus").post(customCheckUser, (req: Request, res: Response) => {
 
 router
   .route("/getRestroDetails/:sessionId")
-  .get(customCheckUser, (req: Request, res: Response) => {
+  .get(customCheckSeller, (req: Request, res: Response) => {
     SellerController.getRestroDetails(req as CustomRequest, res);
   });
 
 router
   .route("/addFood")
-  .post(customCheckUser, (req: Request, res: Response) => {
+  .post(customCheckSeller, (req: Request, res: Response) => {
     SellerController.addFood(req as CustomRequest, res);
   });
 
 router
   .route("/deleteFood/:sessionId")
-  .delete(customCheckUser, (req: Request, res: Response) => {
+  .delete(customCheckSeller, (req: Request, res: Response) => {
     SellerController.deleteFood(req as CustomRequest, res);
   });
-
 
 export default router;

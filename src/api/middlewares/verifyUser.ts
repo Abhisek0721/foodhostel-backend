@@ -1,7 +1,5 @@
 import { Response, NextFunction } from "express";
-import properties from "../../config/properties";
 import mongoStore from "../../config/mongoStore";
-import User from "../models/userModel";
 import CustomRequest from "../common/CustomRequestInterface";
 
 export const checkUser = async (

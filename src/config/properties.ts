@@ -5,6 +5,7 @@ dotenv.config();
 interface propertiesInterface {
   PORT: number; // in development
   SERVER_URL: string;
+  CLIENT_URL: string;
   MONGO_URI: string;
   AES_SECRET: string;
   SESSION_SECRET: string;
@@ -18,9 +19,9 @@ interface propertiesInterface {
 const properties: propertiesInterface = {
   PORT: Number(process.env.PORT) || 3000,
 
-  SERVER_URL:
-    process.env.SERVER_URL ||
-    `http://localhost:3000`,
+  SERVER_URL: process.env.SERVER_URL || `http://localhost:3000`,
+
+  CLIENT_URL: process.env.CLIENT_URL || `http://localhost:8080`,
 
   MONGO_URI:
     process.env.MONGO_URI ||
@@ -38,7 +39,8 @@ const properties: propertiesInterface = {
 
   RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID || `rzp_test_74l7fOTJq7OZMi`,
 
-  RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET || `pmBAe8uuVMZzWvdj5xCnzkZM`
+  RAZORPAY_KEY_SECRET:
+    process.env.RAZORPAY_KEY_SECRET || `pmBAe8uuVMZzWvdj5xCnzkZM`,
 };
 
 export default properties;
