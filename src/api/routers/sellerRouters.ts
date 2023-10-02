@@ -35,4 +35,10 @@ router
     SellerController.deleteFood(req as CustomRequest, res);
   });
 
+router
+  .route("/getRestroFoods/:sessionId")
+  .delete(customCheckSeller, (req: Request, res: Response) => {
+    SellerController.getRestroFoods(req as CustomRequest, res);
+  });
+
 export default router;

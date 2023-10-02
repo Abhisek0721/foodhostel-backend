@@ -33,6 +33,7 @@ export const verifySeller = async (
         });
         if (checkSeller) {
           req.userId = session.user.userId;
+          req.sellerId = checkSeller._id;
           req.phoneNumber = session.user.phoneNumber;
           req.firstName = session.user.firstName;
           req.lastName = session.user.lastName;

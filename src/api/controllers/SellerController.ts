@@ -19,34 +19,34 @@ class SellerController {
         restroName,
         pincode,
         city,
-        roadName
-      }:{
-        restroName: string|undefined;
-        pincode: string|undefined;
-        city: string|undefined;
-        roadName: string|undefined;
+        roadName,
+      }: {
+        restroName: string | undefined;
+        pincode: string | undefined;
+        city: string | undefined;
+        roadName: string | undefined;
       } = req.body;
-      let checkSeller = await Seller.exists({userId: userId});
+      let checkSeller = await Seller.exists({ userId: userId });
 
-      if(!checkSeller){
+      if (!checkSeller) {
         let seller = new Seller({
-            userId: userId,
-            activate: false,
-            restroName: restroName,
-            pincode: pincode,
-            city: city,
-            roadName: roadName
+          userId: userId,
+          activate: false,
+          restroName: restroName,
+          pincode: pincode,
+          city: city,
+          roadName: roadName,
         });
         seller.save();
         return res.status(200).json({
           status: true,
-          message: "Created restro account successfully!"
+          message: "Created restro account successfully!",
         });
       }
 
       return res.status(200).json({
         status: false,
-        message: "Restro account already exists!"
+        message: "Restro account already exists!",
       });
     } catch (error) {
       return res.status(500).json({
@@ -55,8 +55,8 @@ class SellerController {
         error: error?.stack,
       });
     }
-  }
-  
+  };
+
   //API : /restro/getRestroDetails/:sessionId
   //Method : GET
   //Access : Public
@@ -65,14 +65,12 @@ class SellerController {
     try {
       const userId = req.userId;
       const checkSeller = await Seller.findOne({
-        userId: userId
+        userId: userId,
       });
-      return res.status(200).json(
-        {
-          status: true,
-          data: checkSeller
-        }
-      );
+      return res.status(200).json({
+        status: true,
+        data: checkSeller,
+      });
     } catch (error) {
       return res.status(500).json({
         status: false,
@@ -80,7 +78,7 @@ class SellerController {
         error: error?.stack,
       });
     }
-  }
+  };
 
   //API : /restro/addFood
   //Method : POST
@@ -93,45 +91,50 @@ class SellerController {
         foodName,
         foodCategory,
         beverageVolume,
-        foodPrice
-      }:{
+        foodPrice,
+      }: {
         foodName: string;
-        foodCategory: 'Briyani'|'Pizza'|'Burger'|'Rolls'|'Sandwich'|'Sweets'|'Others';
+        foodCategory:
+          | "Briyani"
+          | "Pizza"
+          | "Burger"
+          | "Rolls"
+          | "Sandwich"
+          | "Sweets"
+          | "Others";
         beverageVolume?: number;
-        foodPrice: number|string;
+        foodPrice: number | string;
       } = req.body;
       const files = req.files?.selectedImage;
-      if(!files){
-          return res.status(400).json({
-            status: false,
-            message: "File is not uploaded!"
-          })
+      if (!files) {
+        return res.status(400).json({
+          status: false,
+          message: "File is not uploaded!",
+        });
       }
-      const imageFile:any = req.files?.selectedImage;
+      const imageFile: any = req.files?.selectedImage;
       const fileName = SellerClass.saveFoodImage(imageFile);
       const checkSeller = await Seller.findOne(
         {
-          userId: userId
+          userId: userId,
         },
         {
-          _id: 1
+          _id: 1,
         }
       );
-      let saveFood = new FoodItem(
-        {
-          sellerId: checkSeller?._id,
-          foodName: foodName,
-          imgName: fileName,
-          foodCategory: foodCategory,
-          foodPrice: Number(foodPrice),
-          beverageVolume: beverageVolume
-        }
-      );
+      let saveFood = new FoodItem({
+        sellerId: checkSeller?._id,
+        foodName: foodName,
+        imgName: fileName,
+        foodCategory: foodCategory,
+        foodPrice: Number(foodPrice),
+        beverageVolume: beverageVolume,
+      });
       saveFood.save();
       return res.status(200).json({
         status: true,
-        message: "Food item has been added successfully!"
-      })
+        message: "Food item has been added successfully!",
+      });
     } catch (error) {
       return res.status(500).json({
         status: false,
@@ -139,7 +142,7 @@ class SellerController {
         error: error?.stack,
       });
     }
-  }
+  };
 
   //API : /restro/deleteFood/:sessionId?foodId={foodId}
   //Method : DELETE
@@ -149,43 +152,35 @@ class SellerController {
     const userId = req.userId;
     try {
       const foodId = req.query?.foodId;
-      if(!foodId){
-        return res.status(400).json(
-          {
-            status: false,
-            message: "foodId is not received as a query parameter!"
-          }
-        );
+      if (!foodId) {
+        return res.status(400).json({
+          status: false,
+          message: "foodId is not received as a query parameter!",
+        });
       }
       let checkSeller = await Seller.findOne(
         {
-          userId: userId
+          userId: userId,
         },
         {
-          _id: 1
+          _id: 1,
         }
       );
-      if(!checkSeller){
-        return res.status(403).json(
-          {
-            status: false,
-            message: "This sessionId is not identified as restro partner."
-          }
-        );
+      if (!checkSeller) {
+        return res.status(403).json({
+          status: false,
+          message: "This sessionId is not identified as restro partner.",
+        });
       }
-      const info = await FoodItem.deleteOne(
-        {
-          _id: foodId,
-          sellerId: checkSeller._id
-        }
-      );
-      return res.status(200).json(
-        {
-          status: true,
-          info: info,
-          message: "Food item is deleted!"
-        }
-      );
+      const info = await FoodItem.deleteOne({
+        _id: foodId,
+        sellerId: checkSeller._id,
+      });
+      return res.status(200).json({
+        status: true,
+        info: info,
+        message: "Food item is deleted!",
+      });
     } catch (error) {
       return res.status(500).json({
         status: false,
@@ -193,7 +188,46 @@ class SellerController {
         error: error?.stack,
       });
     }
-  }
+  };
+
+  //API : /restro/getRestroFoods/:sessionId?skipFrom={skipFrom}&limit={limit}
+  //Method : GET
+  //Access : Public
+  //Description : fetch foods of restro partner (skipFrom and limit are optional)
+  getRestroFoods = async (req: CustomRequest, res: Response) => {
+    const userId = req.userId;
+    try {
+      let { skipFrom, limit } = req.query;
+      if (!skipFrom) {
+        skipFrom = "0";
+      }
+      if (!limit) {
+        limit = "0";
+      }
+
+      const fetchFoods = await FoodItem.find(
+        {
+          sellerId: req.sellerId,
+        },
+        {},
+        {
+          skip: Number(skipFrom),
+          limit: Number(limit),
+        }
+      );
+
+      return res.status(200).json({
+        status: true,
+        data: fetchFoods,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: false,
+        message: error?.message,
+        error: error?.stack,
+      });
+    }
+  };
 }
 
 export default new SellerController();
