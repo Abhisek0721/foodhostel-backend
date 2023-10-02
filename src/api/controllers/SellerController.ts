@@ -103,7 +103,7 @@ class SellerController {
           | "Sandwich"
           | "Sweets"
           | "Others";
-        beverageVolume?: number;
+        beverageVolume?: number|string;
         foodPrice: number | string;
       } = req.body;
       const files = req.files?.selectedImage;
@@ -129,7 +129,7 @@ class SellerController {
         imgName: fileName,
         foodCategory: foodCategory,
         foodPrice: Number(foodPrice),
-        beverageVolume: beverageVolume,
+        beverageVolume: Number(beverageVolume),
       });
       saveFood.save();
       return res.status(200).json({
