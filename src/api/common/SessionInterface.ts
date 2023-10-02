@@ -3,7 +3,9 @@ import { SessionData } from 'express-session';
 interface ISession {
     user?: {
         userId: string;
-        email: string;
+        firstName: string;
+        lastName: string;
+        phoneNumber: string;
     };
     sentOTP?: {
         firstName: string;

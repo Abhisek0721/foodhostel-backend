@@ -2,13 +2,13 @@ import { Schema, Model, model, Document } from "mongoose";
 import { IUser } from "./userModel";
 import { IFoodItem } from "./foodItemModel";
 
-export interface IAddToFavourite extends Document {
+export interface IFavouriteFood extends Document {
     userId: IUser["_id"];
     foodItemId: IFoodItem["_id"];
     foodName: IFoodItem["foodName"];
 }
 
-const addToFavouriteSchema:Schema = new Schema<IAddToFavourite>({
+const favouriteFoodSchema:Schema = new Schema<IFavouriteFood>({
     userId: {
         type: Schema.Types.ObjectId,
         required: true,
@@ -25,6 +25,6 @@ const addToFavouriteSchema:Schema = new Schema<IAddToFavourite>({
     }
 });
 
-const AddToFavourite:Model<IAddToFavourite> = model<IAddToFavourite>("AddToFavourite", addToFavouriteSchema);
+const FavouriteFood:Model<IFavouriteFood> = model<IFavouriteFood>("AddToFavourite", favouriteFoodSchema);
 
-export default AddToFavourite;
+export default FavouriteFood;

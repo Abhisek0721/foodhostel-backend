@@ -7,6 +7,8 @@ export interface IFoodOrder extends Document {
   sellerId: ISeller["_id"]; // seller id
   userId: IUser["_id"]; // customer id
   foodId: IFoodItem["_id"];
+  razorpayPaymentLinkId: string;
+  razorpayPaymentId?: string; // payment id after successful payment
   Qty : number;
   addedItems?: [];
   orderToken?: string,
@@ -20,7 +22,6 @@ export interface IFoodOrder extends Document {
   foodPrice: number;
   orderDateTime?: Date;
   orderStatus?: boolean;
-  cashOnDelivery?: boolean;
   sellerDecision?: string;
   delivered?: boolean;
 }
@@ -40,6 +41,14 @@ const foodOrderSchema:Schema = new Schema<IFoodOrder>({
         type: Schema.Types.ObjectId,
         required: true,
         ref: "FoodItem"
+    },
+    razorpayPaymentLinkId: {
+        type: String,
+        required: true
+    },
+    razorpayPaymentId: {
+        // payment id after successful payment
+        type: String
     },
     Qty: {
         type: Number,
@@ -83,10 +92,6 @@ const foodOrderSchema:Schema = new Schema<IFoodOrder>({
         default: Date.now()
     },
     orderStatus: {
-        type: Boolean,
-        default: false
-    },
-    cashOnDelivery: {
         type: Boolean,
         default: false
     },

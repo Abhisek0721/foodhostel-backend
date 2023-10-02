@@ -13,6 +13,7 @@ import {
   redisVerifyUser,
   redisDelete,
 } from "../../utils/redisOtpHandler";
+import axios from "axios";
 
 class UserController {
   //API : /users/login
@@ -21,9 +22,12 @@ class UserController {
   //Description : login a user
   public login = async (req: Request, res: Response) => {
     try {
-      let { phoneNumber, password }:{
-        phoneNumber: string|undefined;
-        password: string|undefined;
+      let {
+        phoneNumber,
+        password,
+      }: {
+        phoneNumber: string | undefined;
+        password: string | undefined;
       } = req.body;
       if (!phoneNumber || !password) {
         return res.status(400).json({
@@ -33,7 +37,18 @@ class UserController {
       }
 
       // fetch user's data
-      let user: any = await User.findOne({ phoneNumber: phoneNumber });
+      let user = await User.findOne(
+        { 
+          phoneNumber: phoneNumber 
+        },
+        {
+          _id: 1,
+          phoneNumber: 1,
+          firstName: 1,
+          lastName: 1,
+          password: 1
+        }
+      );
       if (user) {
         var decryptedPassword: any = aes.decrypt(
           user.password,
@@ -45,7 +60,9 @@ class UserController {
           const sessionData = req.session as unknown as ISession;
           sessionData.user = {
             userId: user._id,
-            email: user.email,
+            phoneNumber: phoneNumber,
+            firstName: user.firstName,
+            lastName: user.lastName
           };
           return res.json({
             auth: true,
@@ -107,18 +124,16 @@ class UserController {
   public verifyToken = async (req: CustomRequest, res: Response) => {
     const userId = req.userId;
     try {
-      const userData = await User.exists(
-        {
-          _id: userId
-        }
-      );
-      if(userData._id){
+      const userData = await User.exists({
+        _id: userId,
+      });
+      if (userData._id) {
         return res.status(200).json({
-          status: true
+          status: true,
         });
       }
       return res.status(200).json({
-        status: false
+        status: false,
       });
     } catch (error: any) {
       return res.status(500).json({
@@ -135,16 +150,16 @@ class UserController {
   //Description : signup new user
   public signup = async (req: Request, res: Response) => {
     try {
-      let { 
-        firstName, 
-        lastName, 
-        phoneNumber, 
-        password 
-      }:{
-        firstName: string|undefined;
-        lastName: string|undefined;
-        phoneNumber: string|undefined;
-        password: string|undefined;
+      let {
+        firstName,
+        lastName,
+        phoneNumber,
+        password,
+      }: {
+        firstName: string | undefined;
+        lastName: string | undefined;
+        phoneNumber: string | undefined;
+        password: string | undefined;
       } = req.body;
       if (!phoneNumber || !password || !firstName || !lastName) {
         return res.status(400).json({
@@ -167,6 +182,7 @@ class UserController {
       // const sessionData = req.session as unknown as ISession;
       let generatedOTP = `${Math.floor(1000 + Math.random() * 9000)}`;
       console.log(`generatedOTP: ${generatedOTP}`);
+      generatedOTP = "1111";
       const userData = {
         firstName: firstName,
         lastName: lastName,
@@ -199,9 +215,12 @@ class UserController {
   //Description : For phoneNumber verification of a user.
   public verifyOTP = async (req: Request, res: Response) => {
     try {
-      let { phoneNumber, receivedOTP }:{
-        phoneNumber: string|undefined;
-        receivedOTP: string|undefined;
+      let {
+        phoneNumber,
+        receivedOTP,
+      }: {
+        phoneNumber: string | undefined;
+        receivedOTP: string | undefined;
       } = req.body;
       if (!phoneNumber || !receivedOTP) {
         return res.status(400).json({
@@ -223,13 +242,11 @@ class UserController {
         });
       }
 
-      if(redisResponse.verified === null){
-        return res.status(400).json(
-          {
-            status: false,
-            message: "Wrong Phone-Number!"
-          }
-        );
+      if (redisResponse.verified === null) {
+        return res.status(400).json({
+          status: false,
+          message: "Wrong Phone-Number!",
+        });
       }
 
       if (redisResponse && redisResponse.newUser === "true") {
@@ -241,7 +258,7 @@ class UserController {
           password: redisResponse.password,
         });
         user.save();
-        console.log("Created new account!")
+        console.log("Created new account!");
         await redisDelete(phoneNumber);
         return res.status(200).json({
           status: true,
@@ -338,9 +355,12 @@ class UserController {
   //Description : Change forgotten password.
   public changeForgottenPassword = async (req: Request, res: Response) => {
     try {
-      let { phoneNumber, newPassword }:{
-        phoneNumber: string|undefined;
-        newPassword: string|undefined;
+      let {
+        phoneNumber,
+        newPassword,
+      }: {
+        phoneNumber: string | undefined;
+        newPassword: string | undefined;
       } = req.body;
       if (!phoneNumber || !newPassword) {
         return res.status(400).json({

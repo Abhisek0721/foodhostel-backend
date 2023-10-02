@@ -3,7 +3,9 @@ import { Request } from "express";
 
 interface CustomRequest extends Request {
     userId: string | Types.ObjectId;
-    emailId: string;
+    phoneNumber: string;
+    firstName: string;
+    lastName: string;
 }
 
 export default CustomRequest;

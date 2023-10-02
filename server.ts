@@ -12,6 +12,7 @@ import addressRouters from "./src/api/routers/addressRouters";
 import foodItemRouters from "./src/api/routers/foodItemRouters";
 import sellerRouters from "./src/api/routers/sellerRouters";
 import contactRouters from "./src/api/routers/contactRouters";
+import foodOrderRouters from "./src/api/routers/foodOrderRouters";
 
 dotenv.config();
 connectDB(properties.MONGO_URI);
@@ -57,6 +58,7 @@ app.use("/address", addressRouters);
 app.use("/fooditem", foodItemRouters);
 app.use("/restro", sellerRouters);
 app.use("/contact", contactRouters);
+app.use("/foodorder", foodOrderRouters);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

@@ -11,6 +11,8 @@ interface propertiesInterface {
   REDIS_PASSWORD: string;
   REDIS_HOST: string;
   REDIS_PORT: number;
+  RAZORPAY_KEY_ID: string;
+  RAZORPAY_KEY_SECRET: string;
 }
 
 const properties: propertiesInterface = {
@@ -18,7 +20,7 @@ const properties: propertiesInterface = {
 
   SERVER_URL:
     process.env.SERVER_URL ||
-    `https://authenticator-api-production-8231.up.railway.app`,
+    `http://localhost:3000`,
 
   MONGO_URI:
     process.env.MONGO_URI ||
@@ -28,11 +30,15 @@ const properties: propertiesInterface = {
 
   SESSION_SECRET: process.env.SESSION_SECRET || `pwegpbpqxzslgfamnx`,
 
-  REDIS_PASSWORD: "@Abhi0721",
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD || "@Abhi0721",
 
-  REDIS_HOST: "localhost",
+  REDIS_HOST: process.env.REDIS_HOST || "localhost",
 
-  REDIS_PORT: 6379,
+  REDIS_PORT: Number(process.env.REDIS_PORT) || 6379,
+
+  RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID || `rzp_test_74l7fOTJq7OZMi`,
+
+  RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET || `pmBAe8uuVMZzWvdj5xCnzkZM`
 };
 
 export default properties;

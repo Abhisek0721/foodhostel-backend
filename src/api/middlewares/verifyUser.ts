@@ -32,7 +32,9 @@ export const checkUser = async (
       }
       if (session && session.user && session.user.userId) {
         req.userId = session.user.userId;
-        req.emailId = session.user.email;
+        req.phoneNumber = session.user.phoneNumber;
+        req.firstName = session.user.firstName;
+        req.lastName = session.user.lastName;
         return next();
       }
       return res.status(403).json({ auth: false, message: "Invalid sessionId!" });
