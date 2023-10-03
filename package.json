@@ -9,7 +9,7 @@
   },
   "scripts": {
     "dev": "nodemon server.ts",
-    "start": "node dist/server.js",
+    "start": "node server.js",
     "debug": "nodemon --inspect server.ts",
     "build": "tsc"
   },
