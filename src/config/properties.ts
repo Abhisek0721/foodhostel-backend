@@ -12,6 +12,7 @@ interface propertiesInterface {
   REDIS_PASSWORD: string;
   REDIS_HOST: string;
   REDIS_PORT: number;
+  REDIS_URL: string;
   RAZORPAY_KEY_ID: string;
   RAZORPAY_KEY_SECRET: string;
 }
@@ -31,16 +32,21 @@ const properties: propertiesInterface = {
 
   SESSION_SECRET: process.env.SESSION_SECRET || `pwegpbpqxzslgfamnx`,
 
-  REDIS_PASSWORD: process.env.REDIS_PASSWORD || "@Abhi0721",
+  REDIS_PASSWORD:
+    process.env.REDIS_PASSWORD || "JH352DZoA4n41mhtKcikL4nIoXTd3ea3",
 
-  REDIS_HOST: process.env.REDIS_HOST || "localhost",
+  REDIS_HOST: process.env.REDIS_HOST || "oregon-redis.render.com",
 
   REDIS_PORT: Number(process.env.REDIS_PORT) || 6379,
+
+  REDIS_URL:
+    process.env.REDIS_URL ||
+    "rediss://red-cke546vs0fgc73di3820:JH352DZoA4n41mhtKcikL4nIoXTd3ea3@oregon-redis.render.com:6379",
 
   RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID || `rzp_test_74l7fOTJq7OZMi`,
 
   RAZORPAY_KEY_SECRET:
-    process.env.RAZORPAY_KEY_SECRET || `pmBAe8uuVMZzWvdj5xCnzkZM`
+    process.env.RAZORPAY_KEY_SECRET || `pmBAe8uuVMZzWvdj5xCnzkZM`,
 };
 
 export default properties;
