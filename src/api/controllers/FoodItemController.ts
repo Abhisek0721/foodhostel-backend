@@ -79,7 +79,7 @@ class FoodItemController {
       let limit = Number(req.query?.limit);
       let category = req.query.category;
       let fetchActiveRestro = [];
-      if (!pincode || pincode === null) {
+      if (!pincode) {
         pincode = "140307";
       }
       if (!skipFrom) {

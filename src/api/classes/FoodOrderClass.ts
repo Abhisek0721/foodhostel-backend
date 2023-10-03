@@ -26,7 +26,7 @@ class FoodOrderClass {
         sms: true,
         email: true
       },
-      callback_url: properties.CLIENT_URL,
+      callback_url: `${properties.CLIENT_URL}/orderSuccess`,
       callback_method: "get"
     });
 

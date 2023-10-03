@@ -43,8 +43,7 @@ const foodItemSchema: Schema = new Schema<IFoodItem>({
 
 foodItemSchema.index({
   foodName: "text",
-  foodCategory: "text",
-  restroName: "text",
+  foodCategory: "text"
 }); // for full search queries
 
 const FoodItem: Model<IFoodItem> = model<IFoodItem>("FoodItem", foodItemSchema);
