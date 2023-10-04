@@ -40,6 +40,8 @@ The following environment variables can be set to configure the project:
 
   "REDIS_PORT": 6379,
 
+  "REDIS_URL": "external redis url",
+
   "RAZORPAY_KEY_ID": "rzp_test_74l7fOTJq7OZMi",
 
   "RAZORPAY_KEY_SECRET": "pmBAe8uuVMZzWvdj5xCnzkZM"
