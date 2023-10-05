@@ -2,7 +2,7 @@
 
 ### Frontend Source Code: https://github.com/Abhisek0721/foodhostel
 
-### Backend Live: https://foodhostelapi.onrender.com
+### Backend Live: https://foodhostel.abhisekh.info
 
 ## How to Run ?
 

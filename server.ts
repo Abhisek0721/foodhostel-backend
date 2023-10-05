@@ -5,6 +5,7 @@ import dotenv, { parse } from "dotenv";
 import connectDB from "./src/config/dbConfig";
 import properties from "./src/config/properties";
 import session from "express-session";
+import path from "path";
 import mongoStore from "./src/config/mongoStore";
 import generateStaticDirectory from "./src/utils/createStaticDirectory";
 import userRouters from "./src/api/routers/userRouters";
@@ -47,8 +48,8 @@ try {
 
 const port: number = Number(properties.PORT) || 3000;
 
-app.get("/", async (req: Request, res: Response) => {
-  return res.send(`<h1>Running on Port : ${port}</h1>`);
+app.get("*", async (req: Request, res: Response) => {
+  return res.sendFile(path.join(__dirname, "/static/build/index.html"));
 });
 
 // creating static/excelsheets directories if it doesn't exists
